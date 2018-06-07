@@ -1,0 +1,318 @@
+.tab-pane{
+	    background-color: #fff;
+    border: 1px solid #ddd;
+    border-top-color: transparent;
+
+}
+.react-calendar-heatmap .color-scale-1 { fill: #d6e685; }
+.react-calendar-heatmap .color-scale-2 { fill: #8cc665; }
+.react-calendar-heatmap .color-scale-3 { fill: #44a340; }
+.react-calendar-heatmap .color-scale-4 { fill: #1e6823; }
+.react-calendar-heatmap .color-scale2-1 { fill: #ff4500; }
+.react-calendar-heatmap .color-scale2-2 { fill: #8cc665; }
+.react-calendar-heatmap .color-scale2-3 { fill: #ff4500; }
+.react-calendar-heatmap .color-scale2-4 { fill: #1e6823; }
+/*
+ * react-calendar-heatmap styles
+ *
+ * All of the styles in this file are optional and configurable!
+ * The github and gitlab color scales are provided for reference.
+ */
+
+.react-calendar-heatmap text {
+  font-size: 10px;
+  fill: #aaa;
+}
+
+.react-calendar-heatmap .react-calendar-heatmap-small-text {
+  font-size: 5px;
+}
+
+.react-calendar-heatmap rect:hover {
+  stroke: #555;
+  stroke-width: 1px;
+}
+
+/*
+ * Default color scale
+ */
+
+.react-calendar-heatmap .color-empty {
+  fill: #eeeeee;
+}
+
+.react-calendar-heatmap .color-filled {
+  fill: #8cc665;
+}
+.react-calendar-heatmap{
+	height: 350px;
+}
+/*
+ * Github color scale
+ */
+
+.react-calendar-heatmap .color-github-0 {
+  fill: #eeeeee;
+}
+.react-calendar-heatmap .color-github-1 {
+  fill: #d6e685;
+}
+.react-calendar-heatmap .color-github-2 {
+  fill: #8cc665;
+}
+.react-calendar-heatmap .color-github-3 {
+  fill: #44a340;
+}
+.react-calendar-heatmap .color-github-4 {
+  fill: #1e6823;
+}
+
+/*
+ * Gitlab color scale
+ */
+
+.react-calendar-heatmap .color-gitlab-0 {
+  fill: #ededed;
+}
+.react-calendar-heatmap .color-gitlab-1 {
+  fill: #acd5f2;
+}
+.react-calendar-heatmap .color-gitlab-2 {
+  fill: #7fa8d1;
+}
+.react-calendar-heatmap .color-gitlab-3 {
+  fill: #49729b;
+}
+.react-calendar-heatmap .color-gitlab-4 {
+  fill: #254e77;
+}
+.sm-st-info{
+	margin-top: 16px;
+}
+.topcard{
+	background-color:#b5e9fa;
+	height:75px;
+	border-right: 2px solid #9f9f9f;
+}
+.topcard-left{
+	background-color:#b5e9fa;
+	margin-left: 30px;
+	border-radius: 10px 0 0 10px;
+	height:75px;
+	border-right: 2px solid #9f9f9f;
+}
+.topcard-right{
+	background-color:#b5e9fa;
+	margin-right: 10px;
+	border-radius: 0 10px 10px 0;
+	height:75px;
+}
+.sm-st-info span {
+	font-size:16px;
+}
+.topmodule{
+	background-color:#427d90;
+	height:50px;
+	border-radius: 15px 15px 15px 15px;
+	padding:10px;
+	margin: 3px;
+	color:white;
+}
+.topmodule-left{
+margin-left: 30px;
+background-color:#427d90;
+	height:50px;
+	border-radius: 15px 15px 15px 15px;
+	padding:10px;
+	margin: 5px;
+	.sm-st-info{
+	margin-top:1px;
+    text-align:center;
+    color:white;
+	}
+	margin-left: 30px;
+}
+.topmodule .sm-st-info{
+	margin-top:1px;
+	text-align:center;
+  cursor: pointer;
+}
+.testhistory-title {
+	margin-left:30px;
+	color:#427d90;
+}
+
+body, html {
+  margin:0; padding: 0;
+  height: 100%;
+  background-image:url(/img/BG.038b31be.png);
+}
+.ct-chart .ct-bar:nth-of-type(4n+1) {
+  stroke: #27c24c;
+}
+
+.ct-chart .ct-bar:nth-of-type(4n+2) {
+  stroke: #27c24c;
+}
+
+.ct-chart .ct-bar:nth-of-type(4n+3) {
+  stroke: #27c24c;
+}
+
+.ct-chart .ct-bar:nth-of-type(4n+4) {
+  stroke: #c14a41;
+}
+.ct-chart .ct-bar:nth-of-type(4n+5) {
+  stroke: #c14a41;
+}
+.ct-chart .ct-bar:nth-of-type(4n+6) {
+  stroke: #c14a41;
+}
+.ct-chart .ct-series.ct-series-a .ct-bar{
+
+}
+.table-topic tbody tr{
+	height:50px;
+}
+.scrollable {
+	height:540px; //or whatever percentage is needed
+    overflow-y: auto;
+    padding-left:50px;
+    padding-right:50px;
+    padding-top:20px;
+
+}
+.test-log-student{
+	height:540px; //or whatever percentage is needed
+    overflow-y: auto;
+    padding-left:50px;
+    padding-right:50px;
+    padding-top:20px;
+    margin-top:40px;
+
+}
+.sm-st-info span {
+  font-size:11px;
+}.sm-st-info span
+
+.heatmap-div {
+  margin-top:20px;
+      width: 2200px !important;
+}
+
+.react-tabs__tab-panel {
+  background:white;
+}
+.right-align-1 {
+  padding-right:25px;
+}
+.right-align-2 {
+  padding-left:26px;
+}
+.right-align-3 {
+  padding-right:22px;
+}
+.right-align-4 {
+  padding-left:38px;
+}
+.right-align-5 {
+  padding-left:60px;
+}
+.right-align-6 {
+  padding-left:50px;
+}
+.right-align-7 {
+  padding-right:33px;
+}
+.right-align-8 {
+  padding-right:11px;
+}
+.react-tabs__tab--selected {
+    background: #fff !important;;
+    border-color: #aaa;
+    color: black;
+    margin-right:5px;
+    border-radius: 8px 8px 0 0;
+ }
+ .react-tabs__tab {
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: none;
+    bottom: -1px;
+    position: relative;
+    list-style: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    background:#c5c5c5;
+    margin-right: 5px;
+    line-height: 1.42857143;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    margin-bottom:1px;
+    padding:10px 15px;
+}
+.react-tabs__tab--disabled {
+    color: GrayText;
+    cursor: default;
+}
+.react-tabs__tab-list {
+  margin-bottom:0px;
+  margin-left: -40px;
+}
+.heatmap-div >div > div:nth-child(1)> div{
+  -webkit-transform: rotate(-45deg);
+  margin-top:20px;
+  margin-bottom:10px;
+  flex: none !important;
+}
+.heatmap-div >div > div:nth-child(n+4)> div{
+  -webkit-transform: rotate(-0deg);
+  margin-top:0px;
+  margin-bottom:0px;
+
+}
+.table-hover {
+ 
+}
+#sm-st-info-button {
+  background-color:#427d90;
+  height:30px;
+  border-radius: 15px 15px 15px 15px;
+  padding:10px;
+  margin: 3px;
+  color:white;
+  width:80px;
+  float: left;
+  cursor: pointer;
+  padding:5px 5px 15px 25px;
+}
+.text-align-left {
+  text-align:left;
+  padding-left:20px;
+}
+.text-align-right {
+  padding-left:60px !important;
+}
+.horiz-scroll {
+  overflow-x: scroll; width:98%;
+  margin-left:10px;
+  margin-top: 50px;
+}
+.horiz-scroll-module{
+  width:2920px; display:block; overflow: hidden;
+  width: 99%;
+    overflow-x: scroll;
+}
+.horiz-model-inside {
+  width:1860px;
+}
+.heatmap-div {
+  width:2200px;
+}
+.ct-label {
+    font-size: 1.25rem !important;
+    color:black !important;
+}
+.horizontalbar-div {
+  td {text-align:right}
+}

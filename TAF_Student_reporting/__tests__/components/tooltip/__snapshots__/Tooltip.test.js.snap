@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tooltip component renders as expected 1`] = `
+<div>
+  <p
+    onBlur={[Function]}
+    onClick={null}
+    onFocus={[Function]}
+    onMouseOut={[Function]}
+    onMouseOver={[Function]}
+  >
+    tooltip content
+  </p>
+</div>
+`;

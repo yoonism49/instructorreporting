@@ -1,0 +1,59 @@
+//colors
+$color_silver_chalice_approx: #aaa;
+$color_fuscous_gray_approx: #555;
+$color_gallery_approx: #eeeeee;
+$color_olivine_approx: #8cc665;
+$color_yellow_green_approx: #d6e685;
+$color_apple_approx: #44a340;
+$color_parsley_approx: #1e6823;
+$color_regent_st_blue_approx: #acd5f2;
+$color_polo_blue_approx: #7fa8d1;
+$color_kashmir_blue_approx: #49729b;
+$color_chathams_blue_approx: #254e77;
+
+.react-calendar-heatmap {
+  text {
+    font-size: 10px;
+    fill: $color_silver_chalice_approx;
+  }
+  .color-empty {
+    fill: $color_gallery_approx;
+  }
+  .color-filled {
+    fill: $color_olivine_approx;
+  }
+  .color-github-0 {
+    fill: $color_gallery_approx;
+  }
+  .color-github-1 {
+    fill: $color_yellow_green_approx;
+  }
+  .color-github-2 {
+    fill: $color_olivine_approx;
+  }
+  .color-github-3 {
+    fill: $color_apple_approx;
+  }
+  .color-github-4 {
+    fill: $color_parsley_approx;
+  }
+  .color-gitlab-0 {
+    fill: $color_gallery_approx;
+  }
+  .color-gitlab-1 {
+    fill: $color_regent_st_blue_approx;
+  }
+  .color-gitlab-2 {
+    fill: $color_polo_blue_approx;
+  }
+  .color-gitlab-3 {
+    fill: $color_kashmir_blue_approx;
+  }
+  .color-gitlab-4 {
+    fill: $color_chathams_blue_approx;
+  }
+  rect:hover {
+    stroke: $color_fuscous_gray_approx;
+    stroke-width: 1px;
+  }
+}
