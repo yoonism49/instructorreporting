@@ -316,3 +316,79 @@ body, html {
 .horizontalbar-div {
   td {text-align:right}
 }
+
+.is-open
+{
+  padding-left:10px;
+      font-family: 'Lato', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size:16px;
+    .fa {
+     padding-right:10px;
+    color:black !important;
+    }
+    .collapsible-icon {
+      width:450px;
+      margin-left:20px;
+    }
+    
+    .collapsible-icon .fa-caret-right-collpase:before {
+    content: "\F0D7";
+    float:left;
+    }
+    .collapsible-icon-second {
+      width:450px;
+      margin-left:30px;
+    }
+    .collapsible-icon-second .fa-caret-right-collpase:before {
+    content: "\F0D7";
+    float:left;
+    }
+   
+}
+.is-closed
+{
+    padding-left:10px;
+      font-family: 'Lato', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size:16px;
+    .fa {
+     padding-right:10px;
+    color:black !important;
+    }
+    .collapsible-icon .fa-caret-right-collpase:before {
+    content: "\F0DA";
+    }
+    .collapsible-icon-second .fa-caret-right-collpase:before {
+    content: "\F0DA";
+    }
+    .bycollapse-button{
+      display:none;
+    }
+    .bycollapse-button-trainee{
+      display:none;
+    }
+    
+    .collapsible-icon {
+      margin-left:20px;
+    }
+  .collapsible-icon-second {
+      margin-left:30px;
+    }
+   
+}
+.Collapsible__contentInner {
+  float:left;
+  width:100%;
+}
+.collapsible-paragraph {
+  margin:12px;
+  padding:10px;
+  background-color:#eeecec;
+   border-radius: 5px;
+    background: #eeecec;
+}
+.collapsible-row{
+  height:300px;
+  overflow-y: scroll;
+}

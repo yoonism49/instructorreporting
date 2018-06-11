@@ -204,19 +204,33 @@ class Home extends React.Component {
             
           </div>
 
-          <div className="row">
+          <div className="row collapsible-row">
             <div className="col-md-12">
-               <Collapsible trigger="Trainee">
-               <div className="Trainee">
-        <p>This is the collapsible content. It can be any element or React component you like.</p>
-        <p>It can even be another Collapsible component. Check out the next section!</p>
-        </div>
-      </Collapsible>
-       <Collapsible trigger="Requirements Not Met">
-      </Collapsible>      
-      <Collapsible trigger="Class Test History">
+
+      <Collapsible trigger={<span className='collapsible-icon'><i className='fa fa-caret-right-collpase'></i>Trainee</span>}>
+      <div className="collapsible-paragraph">
              <WorkProgress />
+      </div>
       </Collapsible>
+      
+       <Collapsible trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Requirements Not Met</div> <div className='bycollapse-button'><span>By Topic</span></div><div className='bycollapse-button-trainee'><span>By Trainee</span></div><br/></div>}>
+       <div className="collapsible-paragraph">
+       <p><span>Topic 01</span></p>
+       <p><span className="topicTitle">Major Requirements(11)</span></p>
+       <p><span className="topicDescription">Bob Smith, James Mason, Henry McFarlene, Janet Jonson, David Silinger, Jim  Hicks, Samuel Johson, Timmothy Alberton</span></p>
+       <p><span className="topicTitle">Minor Requirements(8)</span></p>
+       <p><span className="topicDescription">Janet Jonson, David Silinger, Jim  Hicks, Samuel Johson, Timmothy Alberton</span></p>
+       <p><span className="topicTitle">Critical Errors(1)</span></p>
+       <p><span className="topicDescription">Timmothy Alberton</span></p>
+       <p><span>Topic 02</span></p>
+       <p><span className="topicTitle">Major Requirements(11)</span></p>
+       <p><span className="topicDescription">Bob Smith, James Mason, Henry McFarlene, Janet Jonson, David Silinger, Jim  Hicks, Samuel Johson, Timmothy Alberton</span></p>
+       <p><span className="topicTitle">Minor Requirements(8)</span></p>
+       <p><span className="topicDescription">Janet Jonson, David Silinger, Jim  Hicks, Samuel Johson, Timmothy Alberton</span></p>
+       <p><span className="topicTitle">Critical Errors(1)</span></p>
+       <p><span className="topicDescription">Timmothy Alberton</span></p>
+       </div>
+      </Collapsible>      
             </div>
      
             {/*  

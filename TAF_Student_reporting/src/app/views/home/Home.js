@@ -22,6 +22,7 @@ import '../../style/chartist.css';
 import HeatMap from 'react-heatmap-grid';
 import $ from 'jquery';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Collapsible from 'react-collapsible';
 
 
 export function getRange(count) {
@@ -206,11 +207,13 @@ class Home extends React.Component {
             </div>
           </div>
 
-          <div className="row">
+      <div className="row collapsible-row">
             <div className="col-md-12">
-              <h3 className="panel-heading">Requirements Not Met</h3>
-              <div className="scrollable">
-                <h4>Needs Major Remediation:</h4>
+
+      
+       <Collapsible trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Requirements Not Met</div> </div>}>
+       <div className="collapsible-paragraph">
+       <h4>Needs Major Remediation:</h4>
                 Topic 02, Topic 01
                 <br/>
                <h4>Needs Major Remediation:</h4>
@@ -228,10 +231,10 @@ class Home extends React.Component {
                 <h4>Needs Major Remediation:</h4>
                  02, Topic 01
                 <br/>
-
-              </div>
-          </div>
-        </div>
+       </div>
+      </Collapsible>      
+            </div>
+      </div>
  {/*  
           <div className="row">
             <div className="col-md-5">
