@@ -12,7 +12,7 @@ export {
 // teamMates:
 export {fetchTeamMatesDataIfNeeded}    from './teamMates';
 // userInfos:
-export {fetchUserInfoDataIfNeeded}     from './userInfos';
+export {fetchUserInfoDataIfNeeded, fetchUserTestInfoDataIfNeeded }     from './userInfos';
 // views:
 export {
   enterHome,

@@ -3747,12 +3747,13 @@ ul.online-users {
   color:#fff;
 }
 .sm-st-info {
-  font-size:12px;
+  font-size:16px;
   padding-top:2px;
+  text-align:center;
 }
 .sm-st-info span {
   display:block;
-  font-size:24px;
+  font-size:17px !important;
   font-weight:600;
 }
 .orange {

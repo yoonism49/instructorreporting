@@ -73,11 +73,13 @@ class Home extends React.Component {
         profileColor: PropTypes.oneOf(['danger', 'warning', 'info', 'success'])
       })
     ),
+    userTestInfos: PropTypes.array,
     actions: PropTypes.shape({
       enterHome: PropTypes.func,
       leaveHome: PropTypes.func,
       fetchEarningGraphDataIfNeeded:  PropTypes.func,
-      fetchTeamMatesDataIfNeeded:     PropTypes.func
+      fetchTeamMatesDataIfNeeded:     PropTypes.func,
+      fetchUserTestInfoDataIfNeeded:      PropTypes.func
     })
   }; 
   constructor(props, context) {
@@ -87,20 +89,23 @@ class Home extends React.Component {
     this.customTitleForValue = this.customTitleForValue.bind(this);
 
     this.state = {
+      rawData:[],
       key: 1,
       data: {
-      labels: ['Topic 2', 'Topic 1', 'Topic 4', 'Topic 3', 'Topic 6' , 'Topic 7'],
-      series: [
-        [3, 5, 8, 10, 11, 13]
-      ]
+      labels: ['Topic 2', 'Topic 1', 'Topic 4', 'Topic 3', 'Topic 6', 'Topic 5'],
+      series: [[0,0,0,0,0,0]]
       },
       options : {
         seriesBarDistance: 0,
         reverseData: true,
         horizontalBars: true,
-        axisY: {
-          offset: 70
-        },
+       axisX: {
+    onlyInteger: true,
+    labelInterpolationFnc: function(value) {
+      return value + '%';
+    },
+
+  },
         height: '350px'
       }
     };
@@ -120,6 +125,12 @@ class Home extends React.Component {
 
     fetchEarningGraphDataIfNeeded();
     fetchTeamMatesDataIfNeeded();
+    const url = `http://ec2-54-193-65-106.us-west-1.compute.amazonaws.com:8080/student/fetchStudentAnswers?user_id=5b2001254e342d20e3dcb3c7`;
+    fetch(url)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({rawData:json });
+      });
   }
 
   componentWillUnmount() {
@@ -148,16 +159,60 @@ class Home extends React.Component {
       teamMates,
       teamMatesIsFetching,
       earningGraphLabels,
-      earningGraphDatasets
+      earningGraphDatasets,
+      userTestInfos
     } = this.props;
+    const {rawData} = this.state;
+    let correctness = [];
+    let topicsScore = [];
+    let topicsScoreP = []
+    let topicsIndex=0;
+    let totalPass=0;
+    console.log('userTestInfos' + userTestInfos);
+    if(Object.keys(this.state.rawData).length>0) {
+      for(let i=0;i<Object.keys(this.state.rawData).length;i++) {
+        if(this.state.rawData[i][0][0]===this.state.rawData[i][1]) {
+          correctness[i]=true;
+          totalPass++;
+        }
+        else 
+          correctness[i]=false; 
+        if(i>0&&i%5===0) {
+          topicsIndex++;
+        }
+        if(topicsScore[topicsIndex]===undefined) {
+          topicsScore[topicsIndex]=0;
+          topicsScoreP[topicsIndex]=0;
+        }
+          
+        if(correctness[i]) {
+          topicsScore[topicsIndex]++;
+          topicsScoreP[topicsIndex]=100*(topicsScore[topicsIndex]/5);
+        }
+        
+      }
 
+    }
+    console.log('topicsScore' + topicsScoreP);
+    //if(topicsScore.length>0)
+      this.state.data.series[0]=topicsScoreP.sort();
+    console.log('this.state.data.series'+ this.state.data.series);
     const randomValues = generateRandomValues(5);
     const xLabels = new Array(44).fill(0).map((_, i) => `Topic ${i}`);
     const yLabels = ['Me', 'Group'];
     const data = new Array(yLabels.length)
       .fill(0)
       .map(() => new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100)));
-     
+    let totalScore = correctness.length>1 ?Math.round(100*totalPass/correctness.length,1):0;
+    let rows = [];
+    let j = 0;
+    for (let i = 0; i < correctness.length; i+=4) {
+        if(!correctness[i])
+        {  
+        rows.push(<div><h4>{'Needs Major Remediation:'}</h4></div>);
+        rows.push(<div>{this.state.data.labels[j++]}<br/></div>)
+        }
+    }
     return(
       <AnimatedView>
        <Tabs>
@@ -170,30 +225,22 @@ class Home extends React.Component {
             className="row"
             style={{marginBottom: '5px'}}>
             <h2 className="testhistory-title">Test Results:</h2>
-            <div className="col-md-2 topcard-left">
-             <div className="sm-st-info"><div>Class Name</div><span className="right-align-1">Class 3</span></div>
+            <div className="col-md-3 topcard-left">
+              <div className="sm-st-info"><div>Test Name</div><span className="right-align-4">FC - Module 06</span></div>
             </div>
-            <div className="col-md-3 topcard">
-              <div className="sm-st-info"><div>Test Name</div><span className="right-align-2">FC - Module 06</span></div>
+            <div className="col-md-2 topcard">
+               <div className="sm-st-info"><div>Test Score</div><span className="right-align-3">{totalPass}/{correctness.length}</span></div>
             </div>
-            <div className="col-md-1 topcard">
-               <div className="sm-st-info"><div>Date Completed</div><span className="right-align-3">2018/04/11</span></div>
+            <div className="col-md-2 topcard">
+               <div className="sm-st-info"><div>Test %</div><span className="right-align-4">{totalScore} %</span></div>
             </div>
-            <div className="col-md-1 topcard">
-               <div className="sm-st-info"><div># Finished</div><span className="right-align-4">10</span></div>
+               <div className="col-md-2 topcard">
+               <div className="sm-st-info"><div>Test Result</div><span className="right-align-3">{totalScore>60?'PASS':'FAIL'}</span></div>
             </div>
-               <div className="col-md-1 topcard">
-               <div className="sm-st-info"><div># Incomplete</div><span className="right-align-5">4</span></div>
+               <div className="col-md-2 topcard-right">
+               <div className="sm-st-info"><div>Class Rank</div><span className="right-align-3">2/15</span></div>
             </div>
-               <div className="col-md-1 topcard">
-               <div className="sm-st-info"><div># Not Start</div><span className="right-align-6">1</span></div>
-            </div>
-               <div className="col-md-1 topcard">
-               <div className="sm-st-info"><div>Average %</div><span className="right-align-7">50%</span></div>
-            </div>
-               <div className="col-md-1 topcard-right">
-               <div className="sm-st-info"><div>Pass %</div><span className="right-align-8">53%</span></div>
-            </div>
+           
           </div>
 
           <div className="row">
@@ -213,24 +260,7 @@ class Home extends React.Component {
       
        <Collapsible trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Requirements Not Met</div> </div>}>
        <div className="collapsible-paragraph">
-       <h4>Needs Major Remediation:</h4>
-                Topic 02, Topic 01
-                <br/>
-               <h4>Needs Major Remediation:</h4>
-                Topic 02, Topic 01
-                <br/>
-                <h4>Needs Major Remediation:</h4>
-                Topic 02, Topic 01
-                <br/>
-                <h4>Needs Major Remediation:</h4>
-                Topic 02, Topic 01
-                <br/>
-                <h4>Needs Major Remediation:</h4>
-                Topic 02, Topic 01
-                <br/>
-                <h4>Needs Major Remediation:</h4>
-                 02, Topic 01
-                <br/>
+       {rows}
        </div>
       </Collapsible>      
             </div>

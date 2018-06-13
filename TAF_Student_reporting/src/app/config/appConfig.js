@@ -34,6 +34,12 @@ export const appConfig = {
       API: 'api/userInfos'
     }
   },
+   // userTestInfo config
+  userTestInfos: {
+    data: {
+      API: '/student/fetchStudentAnswers?user_id=5b2001254e342d20e3dcb3c7'
+    }
+  },
 
   HELLO_WORD: 'Hello'
 
