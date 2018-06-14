@@ -92,7 +92,7 @@ class Home extends React.Component {
       rawData:[],
       key: 1,
       data: {
-      labels: ['Topic 2', 'Topic 1', 'Topic 4', 'Topic 3', 'Topic 6', 'Topic 5'],
+      labels: [],
       series: [[0,0,0,0,0,0]]
       },
       options : {
@@ -165,9 +165,11 @@ class Home extends React.Component {
     const {rawData} = this.state;
     let correctness = [];
     let topicsScore = [];
-    let topicsScoreP = []
+    let topicsScoreP = [];
+    let topicValue = [];
     let topicsIndex=0;
     let totalPass=0;
+    let topicLabel = [];
     console.log('userTestInfos' + userTestInfos);
     if(Object.keys(this.state.rawData).length>0) {
       for(let i=0;i<Object.keys(this.state.rawData).length;i++) {
@@ -177,25 +179,28 @@ class Home extends React.Component {
         }
         else 
           correctness[i]=false; 
-        if(i>0&&i%5===0) {
-          topicsIndex++;
-        }
-        if(topicsScore[topicsIndex]===undefined) {
-          topicsScore[topicsIndex]=0;
-          topicsScoreP[topicsIndex]=0;
-        }
-          
+        if(topicValue[this.state.rawData[i][3]]===undefined)
+          topicValue[this.state.rawData[i][3]]=0;
+        topicValue[this.state.rawData[i][3]]++;
+
         if(correctness[i]) {
-          topicsScore[topicsIndex]++;
-          topicsScoreP[topicsIndex]=100*(topicsScore[topicsIndex]/5);
+          if(topicsScoreP[this.state.rawData[i][3]]===undefined) {
+            topicsScoreP[this.state.rawData[i][3]]=0;
+          }
+          topicsScoreP[this.state.rawData[i][3]]++;
         }
-        
       }
 
     }
+
+    for(let i=0;i<topicsScoreP.length;i++) {
+      topicValue[i]=100*(topicsScoreP[i]/topicValue[i]);
+      topicLabel[i]='Topic '+i;
+    }
     console.log('topicsScore' + topicsScoreP);
     //if(topicsScore.length>0)
-      this.state.data.series[0]=topicsScoreP.sort();
+    this.state.data.series[0]=topicValue.sort();
+     this.state.data.labels=topicLabel;
     console.log('this.state.data.series'+ this.state.data.series);
     const randomValues = generateRandomValues(5);
     const xLabels = new Array(44).fill(0).map((_, i) => `Topic ${i}`);
@@ -205,14 +210,44 @@ class Home extends React.Component {
       .map(() => new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100)));
     let totalScore = correctness.length>1 ?Math.round(100*totalPass/correctness.length,1):0;
     let rows = [];
+    let majorString='';
+    
     let j = 0;
-    for (let i = 0; i < correctness.length; i+=4) {
-        if(!correctness[i])
+    let topics='';
+    let topicsTitle='';
+    for (let i = 0; i < topicValue.length; i++) {
+        if(topicValue[i]<30)
         {  
-        rows.push(<div><h4>{'Needs Major Remediation:'}</h4></div>);
-        rows.push(<div>{this.state.data.labels[j++]}<br/></div>)
+          if(majorString.length===0) {
+            topicsTitle = 'Needs Major Remediation:';
+          }
+          topics += topicLabel[i];
+          if(i+1<topicValue.length) {
+            topics += ', ';
+          }
+
         }
     }
+    rows.push(<div><h4>{topicsTitle}</h4></div>);
+    rows.push(<div><br/>{topics}</div>);
+    topicsTitle='';
+    topics='';
+    for (let i = 0; i < topicValue.length; i++) {
+        if(topicValue[i]>30&&topicValue[i]<60)
+        {  
+          if(majorString.length===0) {
+            topicsTitle = 'Needs Minor Remediation:';
+          }
+          topics += topicLabel[i];
+          if(i+1<topicValue.length) {
+            topics += ', ';
+          }
+
+        }
+    }
+    rows.push(<div><h4>{topicsTitle}</h4></div>);
+    rows.push(<div><br/>{topics}</div>);
+    console.log('rows'+rows);
     return(
       <AnimatedView>
        <Tabs>
