@@ -3753,8 +3753,15 @@ ul.online-users {
 }
 .sm-st-info span {
   display:block;
-  font-size:17px !important;
+  font-size:23px !important;
   font-weight:600;
+}
+.testname {
+  display:block;
+  font-size:20px !important;
+  font-weight:600;
+  text-align:left;
+  margin-left:10px;
 }
 .orange {
   background:#fa8564 !important;

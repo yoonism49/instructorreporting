@@ -91,21 +91,21 @@
 }
 .topcard{
 	background-color:#b5e9fa;
-	height:75px;
+	height:85px;
 	border-right: 2px solid #9f9f9f;
 }
 .topcard-left{
 	background-color:#b5e9fa;
 	margin-left: 30px;
 	border-radius: 10px 0 0 10px;
-	height:75px;
+	height:85px;
 	border-right: 2px solid #9f9f9f;
 }
 .topcard-right{
 	background-color:#b5e9fa;
 	margin-right: 10px;
 	border-radius: 0 10px 10px 0;
-	height:75px;
+	height:85px;
 }
 .sm-st-info span {
 	font-size:16px;
@@ -118,9 +118,24 @@
 	margin: 3px;
 	color:white;
 }
-.topmodule-left{
+.topmodule-first {
 margin-left: 30px;
 background-color:#427d90;
+  height:50px;
+  border-radius: 15px 15px 15px 15px;
+  padding:10px;
+  margin: 5px;
+  .sm-st-info{
+  margin-top:1px;
+    text-align:center;
+    color:white;
+  }
+  cursor:point;
+  margin-left: 30px;
+}
+.topmodule-left{
+margin-left: 30px;
+background-color:#f17f0a;
 	height:50px;
 	border-radius: 15px 15px 15px 15px;
 	padding:10px;
@@ -130,7 +145,21 @@ background-color:#427d90;
     text-align:center;
     color:white;
 	}
+  cursor:point;
 	margin-left: 30px;
+}
+.topmodule-left-orange{
+background-color:#f17f0a;
+  height:50px;
+  border-radius: 15px 15px 15px 15px;
+  padding:10px;
+  margin: 5px;
+  .sm-st-info{
+  margin-top:1px;
+    text-align:center;
+    color:white;
+  }
+
 }
 .topmodule .sm-st-info{
 	margin-top:1px;
@@ -171,25 +200,28 @@ body, html {
 .ct-chart .ct-series.ct-series-a .ct-bar{
 
 }
+.table-topic {
+  width:70%;
+}
 .table-topic tbody tr{
 	height:50px;
 }
 .scrollable {
-	height:540px; //or whatever percentage is needed
-    overflow-y: auto;
+	height:1240px; //or whatever percentage is needed
     padding-left:50px;
     padding-right:50px;
     padding-top:20px;
 
 }
 .test-log-student{
-	height:540px; //or whatever percentage is needed
-    overflow-y: auto;
+	height:880px; //or whatever percentage is needed
     padding-left:50px;
     padding-right:50px;
     padding-top:20px;
-    margin-top:40px;
 
+}
+.table-responsive {
+  overflow-x:unset;
 }
 .sm-st-info span {
   font-size:11px;
@@ -322,7 +354,7 @@ body, html {
   padding-left:10px;
       font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;
-    font-size:16px;
+    font-size:24px;
     .fa {
      padding-right:10px;
     color:black !important;
@@ -351,7 +383,7 @@ body, html {
     padding-left:10px;
       font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;
-    font-size:16px;
+    font-size:24px;
     .fa {
      padding-right:10px;
     color:black !important;
@@ -389,6 +421,10 @@ body, html {
     background: #eeecec;
 }
 .collapsible-row{
-  height:300px;
-  overflow-y: scroll;
+  height:460px;
+  //overflow-y: scroll;
+}
+.collapsible-row-log{
+  height:1040px;
+  //overflow-y: scroll;
 }
