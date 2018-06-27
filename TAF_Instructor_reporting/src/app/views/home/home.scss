@@ -109,8 +109,10 @@
 	height:75px;
 }
 .sm-st-info span {
-	font-size:12px;
-}
+   display:block;
+   font-size:23px !important;
+   font-weight:600;
+ }
 .topmodule{
 	background-color:#427d90;
 	height:50px;
@@ -124,34 +126,34 @@
 }
 .bycollapse-button
 {
-	background-color:#ef9c35;
-	height:20px;
-	border-radius: 5px 5px 5px 5px;
-	padding:0px;
-	margin: 3px;
-	color:white;
-	width:90px;
-	float: left;
-	cursor: pointer;
-	font-size: 13px;
+  background-color:#ef9c35;
+  height:20px;
+  border-radius: 5px 5px 5px 5px;
+  padding:0px;
+  margin: 3px;
+  color:white;
+  width:90px;
+  float: left;
+  cursor: pointer;
+  font-size: 13px;
     text-align: center;
     margin-left:20px;
 }
 .bycollapse-title {
-	float:left;
+  float:left;
 }
 .bycollapse-button-trainee
 {
-	background-color:#d4cfc9;
-	height:20px;
-	border-radius: 5px 5px 5px 5px;
-	padding:0px;
-	margin: 3px;
-	color:white;
-	width:90px;
-	float: left;
-	cursor: pointer;
-	font-size: 13px;
+  background-color:#d4cfc9;
+  height:20px;
+  border-radius: 5px 5px 5px 5px;
+  padding:0px;
+  margin: 3px;
+  color:white;
+  width:90px;
+  float: left;
+  cursor: pointer;
+  font-size: 13px;
     text-align: center;
 
 }
@@ -228,30 +230,34 @@ body, html {
 }
 .react-tabs__tab-panel {
 	background:white;
+  overflow-y: scroll;
+  overflow: hidden;
+
 }
 .right-align-1 {
-	padding-right:25px;
+	padding-right:0px;
 }
 .right-align-2 {
-	padding-left:26px;
+	padding-left:0px;
 }
 .right-align-3 {
-	padding-right:22px;
+	padding-right:0px;
+  text-align: center;
 }
 .right-align-4 {
-	padding-left:38px;
+	padding-left:0px;
 }
 .right-align-5 {
-	padding-left:60px;
+	padding-left:0px;
 }
 .right-align-6 {
-	padding-left:50px;
+	padding-left:0px;
 }
 .right-align-7 {
-	padding-right:33px;
+	padding-right:0px;
 }
 .right-align-8 {
-	padding-right:11px;
+	padding-right:0px;
 }
 .react-tabs__tab--selected {
     background: #fff !important;;
@@ -289,28 +295,38 @@ body, html {
     font-size: 1.25rem !important;
     color:black !important;
 }
+.horizontalbar-div {
+  td {text-align:right}
+  height:355px !important;
+}
+
 .is-open
 {
   padding-left:10px;
       font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;
-    font-size:16px;
+    font-size:24px;
     .fa {
      padding-right:10px;
     color:black !important;
     }
     .collapsible-icon {
-    	width:450px;
-    	margin-left:20px;
+      width:500px;
+      margin-left:20px;
     }
-    
+    .bycollapse-button{
+      margin-top: 8px;
+    }
+    .bycollapse-button-trainee{
+      margin-top: 8px;
+    }
     .collapsible-icon .fa-caret-right-collpase:before {
     content: "\F0D7";
     float:left;
     }
     .collapsible-icon-second {
-    	width:450px;
-    	margin-left:30px;
+      width:500px;
+      margin-left:30px;
     }
     .collapsible-icon-second .fa-caret-right-collpase:before {
     content: "\F0D7";
@@ -323,7 +339,7 @@ body, html {
     padding-left:10px;
       font-family: 'Lato', sans-serif;
     -webkit-font-smoothing: antialiased;
-    font-size:16px;
+    font-size:24px;
     .fa {
      padding-right:10px;
     color:black !important;
@@ -335,23 +351,23 @@ body, html {
     content: "\F0DA";
     }
     .bycollapse-button{
-    	display:none;
+      display:none;
     }
     .bycollapse-button-trainee{
-    	display:none;
+      display:none;
     }
     
     .collapsible-icon {
-    	margin-left:20px;
+      margin-left:20px;
     }
-	.collapsible-icon-second {
-    	margin-left:30px;
+  .collapsible-icon-second {
+      margin-left:30px;
     }
    
 }
 .Collapsible__contentInner {
-	float:left;
-	width:100%;
+  float:left;
+  width:100%;
 }
 .collapsible-paragraph {
   margin:12px;
@@ -361,6 +377,17 @@ body, html {
     background: #eeecec;
 }
 .collapsible-row{
-  height:300px;
-  overflow-y: scroll;
+  height:460px;
+  //overflow-y: scroll;
+}
+.collapsible-row-log{
+  height:1040px;
+  //overflow-y: scroll;
+}
+.testname {
+  display:block;
+  font-size:20px !important;
+  font-weight:600;
+  text-align:mid;
+  margin-left:10px;
 }

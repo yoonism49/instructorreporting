@@ -101,7 +101,7 @@ body.fixed .wrapper {
 .content {
   padding: 20px 15px;
   background: linear-gradient(#adbec5, rgba(173, 190, 197, 0.3), rgba(173, 190, 197, 0.7)) !important;
-  overflow: auto;
+  /*overflow: auto;*/
 }
 /* Utility */
 /* H1 - H6 font */
@@ -3752,7 +3752,7 @@ ul.online-users {
 }
 .sm-st-info span {
   display:block;
-  font-size:24px;
+  font-size:20px!important;
   font-weight:600;
 }
 .orange {
@@ -3934,7 +3934,7 @@ white-space: nowrap;
 }
 .panel .panel-heading {
 padding: 10px 15px;
-text-transform: uppercase;
+color: #427d90;
 }
 .bg-info {
 background-color: #7acbee;

@@ -85,8 +85,7 @@ class WorkProgress extends PureComponent {
       <AnimatedView>
         {/* preview: */}
         <Panel
-          title="Class Test Log"
-          hasTitle={true}
+          hasTitle={false}
           bodyBackGndColor={'#F4F5F6'}
           bodyCustomClass="table-responsive">
           <Table>
