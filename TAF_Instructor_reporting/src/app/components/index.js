@@ -12,7 +12,8 @@ export {
 }                                     from './notifications';
 export { default as TeamMatesDemo }   from './teamMates/TeamMatesDemo';
 export { default as TwitterFeed }     from './twitterFeed/TwitterFeed';
-export { default as  WorkProgress }   from './workProgress/WorkProgress';
+export { default as WorkProgress }    from './workProgress/WorkProgress';
+export { default as ClassTestLog }    from './classTestLog/ClassTestLog';
 export { default as StatsCard }       from './statsCard/StatsCard';
 export { default as Jumbotron }       from './jumbotron/Jumbotron';
 export { default as  BasicForms }     from './basicForms/BasicForms';
@@ -60,3 +61,8 @@ export { default as Button }          from './button/Button';
 export { default as Label }           from './label/Label';
 export { default as AnimatedView }    from './animatedView/AnimatedView';
 export { default as ScrollTop }       from './scrollToTop/ScrollToTop';
+
+export { default as ModuleList }      from './moduleList/ModuleList';
+export { default as RequirementsNotMet }  from './mostRecent/RequirementsNotMet';
+export { default as RequirementsWrapper }  from './mostRecent/RequirementsWrapper';
+export { default as MostRecentWrapper} from './mostRecent/MostRecentWrapper';

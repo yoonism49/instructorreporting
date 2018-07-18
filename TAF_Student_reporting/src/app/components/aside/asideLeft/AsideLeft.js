@@ -22,7 +22,7 @@ const AsideLeft = ({
   currentView,
   sideMenu
 }) => (
-  <aside 
+  <aside
     className={
       cx({
         'no-print':          true,

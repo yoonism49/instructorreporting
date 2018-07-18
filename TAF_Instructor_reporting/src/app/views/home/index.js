@@ -8,7 +8,7 @@ import Home                   from './Home';
 const mapStateToProps = (state) => {
   return {
     currentView:  state.views.currentView,
-
+    currentModule: state.testHistory.currentModule,
     earningGraphIsFetching: state.earningGraph.isFetching,
     earningGraphLabels:     state.earningGraph.labels,
     earningGraphDatasets:   state.earningGraph.datasets,
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => {
       {
         enterHome: actions.enterHome,
         leaveHome: actions.leaveHome,
-
+        chooseModule: actions.chooseModule,
         fetchEarningGraphDataIfNeeded:  actions.fetchEarningGraphDataIfNeeded,
         fetchTeamMatesDataIfNeeded:     actions.fetchTeamMatesDataIfNeeded
       },

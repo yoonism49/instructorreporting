@@ -1,6 +1,7 @@
 // @flow weak
 
 import moment from 'moment';
+import axios from 'axios';
 
 const ENTER_LOGIN_VIEW  = 'ENTER_LOGIN_VIEW';
 const LEAVE_LOGIN_VIEW  = 'LEAVE_LOGIN_VIEW';
@@ -45,6 +46,10 @@ const ENTER_PAGINATION_VIEW = 'ENTER_PAGINATION_VIEW';
 const LEAVE_PAGINATION_VIEW = 'LEAVE_PAGINATION_VIEW';
 const ENTER_PROTECTED_VIEW = 'ENTER_PROTECTED_VIEW';
 const LEAVE_PROTECTED_VIEW = 'LEAVE_PROTECTED_VIEW';
+
+const GET_STUDENT_TEST_ANSWERS = 'GET_STUDENT_TEST_ANSWERS';
+const GET_ERRORS = 'GET_ERRORS';
+
 
 const initialState = {
   currentView:  'home',
@@ -117,6 +122,12 @@ export default function views(state = initialState, action) {
       };
     }
     return state;
+
+  case GET_STUDENT_TEST_ANSWERS:
+    return {
+      ...state,
+      answersList: action.payload
+    }
 
   default:
     return state;
@@ -500,4 +511,30 @@ export function leaveProtected(time = moment().format()) {
     enterTime:    null,
     leaveTime:    time
   };
+}
+
+export const fetchStudentTestAnswers = (sessionId) => dispatch => {
+
+    sessionId = encodeURIComponent(sessionId);
+    // const URL=`http://ec2-54-193-65-106.us-west-1.compute.amazonaws.com:8080/student/fetchStudentAnswers?user_id=${userId}`;
+    const URL = `http://localhost:8080/student/fetchStudentAnswers?sessionId=${sessionId}`;
+    console.log(URL);
+
+
+    axios
+      .get(URL)
+      .then(result =>{
+          console.log('result',result);
+          dispatch({
+            type: GET_STUDENT_TEST_ANSWERS,
+            payload: result.data
+          })
+        }
+      )
+      .catch(error =>
+        dispatch({
+          type: GET_ERRORS,
+          payload: error.data
+        })
+      );
 }

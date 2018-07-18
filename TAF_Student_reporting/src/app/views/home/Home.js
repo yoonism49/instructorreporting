@@ -14,7 +14,12 @@ import {
   ClassTestLog,
   TwitterFeed,
   TodoListDemo,
-  TeamMatesDemo
+  TeamMatesDemo,
+  ScoreTable,
+  TopicsGraph,
+  TestResult,
+  RequirementsNotMet,
+  MostRecentWrapper
 }                         from '../../components';
 import ReactDOM from 'react-dom';
 import ChartistGraph from 'react-chartist';
@@ -24,6 +29,12 @@ import $ from 'jquery';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Collapsible from 'react-collapsible';
 import axios from 'axios';
+import * as Chartist from 'chartist';
+import ctPointLabels from './ChartistUtils.js';
+import {Link} from 'react-router-dom';
+
+// import '../../../style.css';
+import './home.scss';
 
 export function getRange(count) {
   return Array.from({ length: count }, (_, i) => i);
@@ -57,7 +68,35 @@ function generateRandomValues(count, date = new Date()) {
         count: getRandomInt(1, 4),
       };
     })
-  }
+}
+
+const headingStyle = {'textDecoration': 'underline', 'letterSpacing' : '1.1px', 'cursor' : 'pointer'};
+
+const tableHeadFontStyle = {
+  'fontWeight': 'bold'
+}
+
+const graphLabelName = {
+  'marginLeft' : '5px',
+  'fontWeight' : 'bold',
+  'fontSize' : '1.05em'
+}
+
+const titleStyle = {
+  'fontWeight' : 'bold'
+}
+
+const graphLabelResults = {
+  'marginLeft': '50%',
+  'fontWeight': 'bold',
+  'fontSize': '1.05em'
+
+}
+
+const hrStyle = {
+  'marginLeft' : '5px'
+}
+
 class Home extends React.Component {
 
   static propTypes = {
@@ -73,7 +112,7 @@ class Home extends React.Component {
         profileColor: PropTypes.oneOf(['danger', 'warning', 'info', 'success'])
       })
     ),
-    userTestInfos: PropTypes.array,
+    userTestInfos: PropTypes.object,
     actions: PropTypes.shape({
       enterHome: PropTypes.func,
       leaveHome: PropTypes.func,
@@ -81,56 +120,78 @@ class Home extends React.Component {
       fetchTeamMatesDataIfNeeded:     PropTypes.func,
       fetchUserTestInfoDataIfNeeded:      PropTypes.func
     })
-  }; 
+  };
+
   constructor(props, context) {
     super(props, context);
 
     this.handleSelect = this.handleSelect.bind(this);
     this.customTitleForValue = this.customTitleForValue.bind(this);
+    this.openNewTab = this.openNewTab.bind(this);
 
     this.state = {
-      rawData:[],
-      key: 1,
-      data: {
-      labels: [],
-      series: [[0,0,0,0,0,0]]
-      },
-      options : {
+        rawData:[],
+        key: 1,
+        data: {
+          labels: [],
+          series: [[0,0,0,0,0,0]]
+        },
+        options : {
+          fullWidth: true,
+          chartPadding: {
+          right: 50
+        },
         seriesBarDistance: 0,
         reverseData: true,
         horizontalBars: true,
-       axisX: {
-    onlyInteger: true,
-    labelInterpolationFnc: function(value) {
-      return value + '%';
-    },
+        axisX: {
+          onlyInteger: true,
+          high: 100,
+          low: 0,
+          labelInterpolationFnc: function(value,index) {
+              // console.log(index);
+              return value + '%';
+          },
+        },
+        plugins: [ ctPointLabels()],
 
-  },
-        height: '350px'
-      }
+        height: '300px'
+      },
+      tabs: []
     };
+
+
   }
   componentWillMount() {
     const { actions: { enterHome } } = this.props;
     enterHome();
   }
 
+
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.answersList) {
+      this.setState({rawData: nextProps.answersList});
+    }
+  }
+
   componentDidMount() {
     const {
       actions: {
         fetchEarningGraphDataIfNeeded,
-        fetchTeamMatesDataIfNeeded
+        fetchTeamMatesDataIfNeeded,
+        fetchStudentTestAnswers
       }
     } = this.props;
 
     fetchEarningGraphDataIfNeeded();
     fetchTeamMatesDataIfNeeded();
-    const url = `http://ec2-54-193-65-106.us-west-1.compute.amazonaws.com:8080/student/fetchStudentAnswers?user_id=5b2001254e342d20e3dcb3c7`;
-    console.log('axios');
-    axios.get(url)
-      .then(res => {
-        this.setState({rawData:res.data });
-      });
+    console.log("RESYLKTS IUD", window.location.search.split('=')[1]);
+    console.log(window.location);
+    // fetchStudentTestAnswers('5b2001254e342d20e3dcb3c7','5b4cf0e8312e1dafc4ee37d6');
+    fetchStudentTestAnswers(window.location.search.split('=')[1]);
+
+    // fetchStudentTestAnswers('5b2001254e342d20e3dcb3c7',localStorage.getItem('resultsId'));
   }
 
   componentWillUnmount() {
@@ -138,23 +199,32 @@ class Home extends React.Component {
     leaveHome();
   }
   componentDidUpdate() {
-    
+
   }
   reloadHeat(index) {
       this.setState({heatData:null,mod:index});
   }
-  
+
   handleSelect(key) {
     const data = this.state.data;
     const options = this.state.options;
     this.setState({ key, data, options });
-    
+
   }
   resize = () => this.forceUpdate();
   customTitleForValue(value) {
     return value ? `You're hovering over ${value.date.toDateString()} with value ${value.count}` : null;
   }
+
+  openNewTab(testname) {
+    this.setState(prevState => ({
+      tabs: [...prevState.tabs, {id: Math.random()}]
+    }));
+  }
+  
   render() {
+
+    //console.log('params', this.props.match.params.id);
     const {
       teamMates,
       teamMatesIsFetching,
@@ -163,6 +233,13 @@ class Home extends React.Component {
       userTestInfos
     } = this.props;
     const {rawData} = this.state;
+
+    if(rawData === undefined || rawData.length === 0) {
+      return (<div>
+                <center><h3><em>Loading Results.....</em></h3></center>
+               </div>);
+    }
+
     let correctness = [];
     let topicsScore = [];
     let topicsScoreP = [];
@@ -170,203 +247,288 @@ class Home extends React.Component {
     let topicsIndex=0;
     let totalPass=0;
     let topicLabel = [];
-    console.log('userTestInfos' + userTestInfos);
-    if(Object.keys(this.state.rawData).length>0) {
-      for(let i=0;i<Object.keys(this.state.rawData).length;i++) {
-        if(this.state.rawData[i][0][0]===this.state.rawData[i][1]) {
-          correctness[i]=true;
-          totalPass++;
-        }
-        else 
-          correctness[i]=false; 
-        if(topicValue[this.state.rawData[i][3]]===undefined)
-          topicValue[this.state.rawData[i][3]]=0;
-        topicValue[this.state.rawData[i][3]]++;
 
-        if(correctness[i]) {
-          if(topicsScoreP[this.state.rawData[i][3]]===undefined) {
-            topicsScoreP[this.state.rawData[i][3]]=0;
+    console.log('rawData', rawData);
+    console.log(Object.keys(rawData));
+
+    if(Object.keys(rawData['questionResponses']).length > 0) {
+      for(let key in rawData['questionResponses']) {
+
+          if(rawData['questionResponses'][key].pass === true) {
+            correctness[key] = true;
+            totalPass++;
+          }else {
+            correctness[key] = false;
           }
-          topicsScoreP[this.state.rawData[i][3]]++;
-        }
+
+          if(topicValue[rawData['questionResponses'][key].topicName] === undefined){
+            topicValue[rawData['questionResponses'][key].topicName] = 1;
+          } else {
+            topicValue[rawData['questionResponses'][key].topicName] +=1;
+          }
+
+          if(correctness[key] === true) {
+            if(topicsScoreP[rawData['questionResponses'][key].topicName] === undefined) {
+              topicsScoreP[rawData['questionResponses'][key].topicName]=1;
+            }else {
+              topicsScoreP[rawData['questionResponses'][key].topicName] +=1;
+            }
+          }
       }
-
     }
 
-    for(let i=0;i<topicsScoreP.length;i++) {
-      topicValue[i]=100*(topicsScoreP[i]/topicValue[i]);
-      topicLabel[i]='Topic '+i;
+    for(let key in topicValue) {
+      if(!(key in topicsScoreP)){
+        topicsScoreP[key]=0;   //this is for topics that might have zero score
+      }
     }
-    console.log('topicsScore' + topicsScoreP);
-    //if(topicsScore.length>0)
-    this.state.data.series[0]=topicValue.sort();
-     this.state.data.labels=topicLabel;
-    console.log('this.state.data.series'+ this.state.data.series);
-    const randomValues = generateRandomValues(5);
-    const xLabels = new Array(44).fill(0).map((_, i) => `Topic ${i}`);
-    const yLabels = ['Me', 'Group'];
-    const data = new Array(yLabels.length)
-      .fill(0)
-      .map(() => new Array(xLabels.length).fill(0).map(() => Math.floor(Math.random() * 100)));
-    let totalScore = correctness.length>1 ?Math.round(100*totalPass/correctness.length,1):0;
-    let rows = [];
-    let majorString='';
-    
-    let j = 0;
-    let topics='';
-    let topicsTitle='';
-    for (let i = 0; i < topicValue.length; i++) {
-        if(topicValue[i]<30)
-        {  
-          if(topicLabel[i] !== undefined) {
-            if(majorString.length===0) {
-              topicsTitle = 'Needs Major Remediation:';
-            }
-          
-            topics += topicLabel[i];
-            if(i<topicValue.length-2) {
-              topics += ', ';
-            }
-          }
 
+    console.log('topicValue asjdhoasdho', topicValue);
+    console.log('topicsScoreP',topicsScoreP);
+
+    console.log('RESUTLS ID IN RENDER', localStorage.getItem('resultsId'));
+    // localStorage.removeItem('resultsId');
+    console.log('RESUTLS ID IN RENDER', localStorage.getItem('resultsId'));
+
+
+    for(let key in topicsScoreP) {
+      console.log(key);
+      console.log(100*(topicsScoreP[key]/topicValue[key]));
+      topicValue.push(100*(topicsScoreP[key]/topicValue[key]));
+      topicLabel.push(key);
+    }
+
+    // let topicWiseScorePercentage = new Array(Object.keys(topicValue).length);
+    // for(const key in topicValue)
+    //   topicWiseScorePercentage.push(topicValue[key]);
+    //
+    // console.log(topicWiseScorePercentage)
+
+    this.state.data.series[0]=topicValue;
+    this.state.data.labels=topicLabel;
+
+    // console.log('topicValue', topicValue);
+    // console.log('topicLabel', topicLabel);
+
+    let totalScore = correctness.length>1 ? Math.round(100*totalPass/correctness.length,1):0;
+
+    let requirementsNotMetObject = {
+      'Major' : [],
+      'Minor' : [],
+      'Critical' : []
+    };
+
+    for(let i=0; i<topicValue.length; i++) {
+        if(topicValue[i] <= 30) {
+          requirementsNotMetObject['Major'].push(' ' + topicLabel[i]);
+        } else if(topicValue[i] >30 && topicValue[i] <=60) {
+          requirementsNotMetObject['Minor'].push(' ' + topicLabel[i]);
         }
     }
-    rows.push(<div><h4>{topicsTitle}</h4></div>);
-    rows.push(<div><br/>{topics}</div>);
-    topicsTitle='';
-    topics='';
-    for (let i = 0; i < topicValue.length; i++) {
-        if(topicValue[i]>30&&topicValue[i]<60)
-        {  
-          if(majorString.length===0) {
-            topicsTitle = 'Needs Minor Remediation:';
-          }
-          topics += topicLabel[i];
-          if(i+1<topicValue.length) {
-            topics += ', ';
-          }
 
-        }
-    }
-    rows.push(<div><h4>{topicsTitle}</h4></div>);
-    rows.push(<div><br/>{topics}</div>);
-    console.log('rows'+rows);
+    const tableHeadersMostRecent = ['Class Avg', '#Questions', '#Points', 'Weight'];
+    const tableContentMostRecent = [
+      ['2','3','4','4'],
+      ['2','3','4','4'],
+      ['2','3','4','4'],
+      ['2','3','4','4'],
+      ['2','3','4','4'],
+      ['2','3','4','4']
+    ];
+
+    const tableheaders = ['Test Name', 'Date Completed', 'Attempt', 'Total Score', 'Result'];
+    const tablecontent = [
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL', '' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ],
+      ['FC-Module 02', '2017/11/20', '4', '0', 'FAIL' ]
+    ];
+
     return(
       <AnimatedView>
        <Tabs>
     <TabList>
       <Tab>Most Recent</Tab>
       <Tab>Test History</Tab>
+          {this.state.tabs.map(tab => (
+                <Tab>Fc Module 02
+                </Tab>
+          ))}
     </TabList>
-    <TabPanel>
-          <div
-            className="row"
-            style={{marginBottom: '5px'}}>
-            <h2 className="testhistory-title">Test Results:</h2>
-            <div className="col-md-3 topcard-left">
-              <div className="sm-st-info"><div>Test Name</div><span className="testname">FC - Module 06</span></div>
-            </div>
-            <div className="col-md-2 topcard">
-               <div className="sm-st-info"><div>Test Score</div><span className="right-align-3">{totalPass}/{correctness.length}</span></div>
-            </div>
-            <div className="col-md-2 topcard">
-               <div className="sm-st-info"><div>Test %</div><span className="right-align-4">{totalScore} %</span></div>
-            </div>
-               <div className="col-md-2 topcard">
-               <div className="sm-st-info"><div>Test Result</div><span className="right-align-3">{totalScore>60?'PASS':'FAIL'}</span></div>
-            </div>
-               <div className="col-md-2 topcard-right">
-               <div className="sm-st-info"><div>Class Rank</div><span className="right-align-3">2/15</span></div>
-            </div>
-           
-          </div>
+    <TabPanel title="Most Recent">
+           <MostRecentWrapper rawData={rawData} totalPass={totalPass} correctness={correctness} 
+           totalScore={totalScore} requirementsNotMetObject={requirementsNotMetObject}
+           data={this.state.data}
+           />
+    </TabPanel>
 
-          <div className="collapsible-row">
-               <Collapsible open trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Topics</div> </div>}>
-       
-            <div className="col-md-7 horizontalbar-div">
-       
-              <ChartistGraph className={'ct-octave'} data={this.state.data} options={this.state.options} type={'Bar'} redraw={'true'} responsive={'true'}/>
-       
-            </div>
-            <div className="col-md-4 horizontalbar-div">
-            <table class="table table-hover table-topic"><thead><tr><td>Class Avg</td><td># Questions</td><td># Points</td><td>Weight</td></tr></thead><tbody><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr><tr><td>2</td><td>3</td><td>4</td><td>4</td></tr></tbody></table>
-
-
-            </div>
-            </Collapsible>      
-      
-          </div>
-
-      <div className="row collapsible-row">
-            <div className="col-md-12">
-
-      
-       <Collapsible open trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Requirements Not Met</div> </div>}>
-       <div className="collapsible-paragraph">
-       {rows}
-       </div>
-      </Collapsible>      
-            </div>
-      </div>
-
-         </TabPanel>
          <TabPanel title="Test History">
-         <div className="horiz-scroll-module">
- <div
-            className=" col-md-12 row horiz-model-inside"
-            className="row horiz-model-inside"
-            style={{marginBottom: '5px'}}>
-            <h2 className="testhistory-title">Test History:</h2>
-           <div className={this.state.mod==='1'?'col-md-1 topmodule-left':this.state.mod===undefined?'col-md-1 topmodule-left':'col-md-1 topmodule-first'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this, '1')}><span>Module 01</span></div>
-            </div>
-            <div className={this.state.mod==='2'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'2')}><span>Module 02</span></div>
-            </div>
-             <div className={this.state.mod==='3'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'3')}><span>Module 03</span></div>
-            </div>
-            <div className={this.state.mod==='4'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'4')}><span>Module 04</span></div>
-            </div>
-             <div className={this.state.mod==='5'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'5')}><span>Module 05</span></div>
-            </div>
-            <div className={this.state.mod==='6'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'6')}><span>Module 06</span></div>
-            </div>
-             <div className={this.state.mod==='7'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'7')}><span>Module 07</span></div>
-            </div>
-            <div className={this.state.mod==='8'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'8')}><span>Module 08</span></div>
-            </div>
-             <div className={this.state.mod==='9'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'9')}><span>Module 09</span></div>
-            </div>
-            <div className={this.state.mod==='10'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'10')}><span>Module 10</span></div>
-            </div>
-             <div className={this.state.mod==='11'?'col-md-1 topmodule-left-orange':'col-md-1 topmodule'}>
-               <div className="sm-st-info" onClick = {this.reloadHeat.bind(this,'11')}><span>Module 11</span></div>
-            </div>
-            </div>
-           
-          </div>
 
-           <div className="collapsible-row-log ">
-               <Collapsible open trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i>Topics</div> </div>}>
-       
+
+          {/* WORK PROGRESS TAG MODIFICATION TO SHOW THE TABLE   <WorkProgress headers={tableheaders} content={tablecontent}  /> */}
+
+          <Collapsible open trigger={<div className='collapsible-icon-second'><div className='bycollapse-title'><i className='fa fa-caret-right-collpase'></i><span style={headingStyle} >Test Log: </span></div></div>}>
             <div className="col-md-12">
               <div className="panel-body table-responsive test-log-student">
-              <h3 className="panel-heading">Test Log</h3>
-<table className="table table-hover"><thead><tr><td>Class</td><td>Test Name</td><td>Date Completed</td><td>Attempts</td><td>Total Score</td><td>Result</td><td></td></tr></thead><tbody><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr><tr><td className="text-align-left">Class 3</td><td className="text-align-left">FC - Module 02</td><td className="text-align-left" className="text-align-left">11/20/2014</td><td className="text-align-right">4</td><td className="text-align-right">0</td><td className="text-align-left">Fail</td><td className="text-align-left"><div id="sm-st-info-button">More</div></td></tr></tbody></table></div>
-            
+
+                <table className="table table-hover">
+                  <thead>
+                    <tr>
+
+                      <td style={tableHeadFontStyle} >Test Name</td>
+                      <td style={tableHeadFontStyle} >Date Completed</td>
+                      <td style={tableHeadFontStyle} >Attempt &nbsp; #</td>
+                      <td style={tableHeadFontStyle} >Total Score</td>
+                      <td style={tableHeadFontStyle} >Result</td>
+                      <td style={tableHeadFontStyle}></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td><td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td><td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                    <tr>
+
+                      <td className="text-align-left">FC - Module 02</td>
+                      <td className="text-align-left" className="text-align-left">11/20/2014</td>
+                      <td className="text-align-right">4</td>
+                      <td className="text-align-right">0</td>
+                      <td className="text-align-left">FAIL</td>
+                      <td className="text-align-left"><div id="sm-st-info-button" onClick={this.openNewTab}>More</div></td>
+                    </tr>
+                  </tbody>
+              </table>
+              </div>
             </div>
-            </Collapsible>
-          </div>
+          </Collapsible>
+
        </TabPanel>
+              {this.state.tabs.map((tab,index) => (
+                  <TabPanel title="Fc Module 02" key={index}>
+                     <MostRecentWrapper rawData={rawData} totalPass={totalPass} correctness={correctness} 
+                       totalScore={totalScore} requirementsNotMetObject={requirementsNotMetObject}
+                       data={this.state.data}
+                     />
+                  </TabPanel>
+              ))}
         </Tabs>
       </AnimatedView>
     );

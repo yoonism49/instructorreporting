@@ -60,3 +60,9 @@ export { default as Button }          from './button/Button';
 export { default as Label }           from './label/Label';
 export { default as AnimatedView }    from './animatedView/AnimatedView';
 export { default as ScrollTop }       from './scrollToTop/ScrollToTop';
+
+export { default as RequirementsNotMet }  from './mostRecent/RequirementsNotMet';
+export { default as MostRecentWrapper} from './mostRecent/MostRecentWrapper';
+export { default as ScoreTable }  from './mostRecent/ScoreTable';
+export { default as TopicsGraph }  from './mostRecent/TopicsGraph';
+export { default as TestResult }  from './mostRecent/TestResult';

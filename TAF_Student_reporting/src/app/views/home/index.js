@@ -1,13 +1,15 @@
+
 // @flow weak
 
 import { bindActionCreators } from 'redux';
 import { connect }            from 'react-redux';
 import * as actions           from '../../redux/modules/actions';
-import Home                   from './Home';
+import Home                    from './Home';
 
 const mapStateToProps = (state) => {
   return {
     currentView:  state.views.currentView,
+    answersList: state.views.answersList,
 
     earningGraphIsFetching: state.earningGraph.isFetching,
     earningGraphLabels:     state.earningGraph.labels,
@@ -27,7 +29,9 @@ const mapDispatchToProps = (dispatch) => {
 
         fetchEarningGraphDataIfNeeded:  actions.fetchEarningGraphDataIfNeeded,
         fetchTeamMatesDataIfNeeded:     actions.fetchTeamMatesDataIfNeeded,
-        fetchUserTestInfoDataIfNeeded : actions.fetchUserTestInfoDataIfNeeded 
+        fetchUserTestInfoDataIfNeeded : actions.fetchUserTestInfoDataIfNeeded,
+
+        fetchStudentTestAnswers: actions.fetchStudentTestAnswers
       },
       dispatch)
   };

@@ -494,7 +494,7 @@ table.text-center th {
   text-align: left;
 }
 .table.align td {
-  text-align: right;
+  text-align: left;
 }
 .text-bold,
 .text-bold.table td,
@@ -4198,4 +4198,21 @@ padding: 6px 10px;
 }
 .st-blue {
   background-color: #23b7e5;
+}
+
+.requirements-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size:16px;
+
+}
+
+.inner-list {
+    list-style-type: none;
+    font-size:16px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
 }

@@ -76,6 +76,7 @@ class App extends Component {
     const userFullName = `${userInfos.firstname} ${userInfos.lastname.toUpperCase()}`;
     return (
       <div>
+
         <Header
           appName={appName}
           userLogin={userInfos.login}
@@ -87,6 +88,7 @@ class App extends Component {
           toggleSideMenu={this.handlesMenuButtonClick}
           onLogout={this.handlesOnLogout}
         />
+
         <div className="wrapper row-offcanvas row-offcanvas-left">
           <AsideLeft
             isAnimated={true}
@@ -109,6 +111,7 @@ class App extends Component {
         {/* <Footer /> */}
         {/* modals cannot be placed anywhere (avoid backdrop or modal placement issues) so all grouped in same component and outside .wrapper*/}
         <Modals />
+
       </div>
     );
   }

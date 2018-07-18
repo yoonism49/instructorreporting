@@ -8,8 +8,9 @@ import userInfos            from './userInfos';
 import teamMates            from './teamMates';
 import views                from './views';
 import userAuth             from './userAuth';
-
+import testHistory			from './testHistory';
 export const reducers = {
+  testHistory,
   earningGraph,
   sideMenu,
   userInfos,

@@ -9,7 +9,6 @@ const WorkProgressPanel = ({
 }) => (
   <section className="panel">
     <header className="panel-heading">
-      {title}
     </header>
     <div className="panel-body table-responsive">
       {children}
@@ -23,7 +22,7 @@ WorkProgressPanel.propTypes = {
 };
 
 WorkProgressPanel.defaultProps = {
-  title: 'Work Progress'
+  title: 'Class Test Log:'
 };
 
 export default WorkProgressPanel;

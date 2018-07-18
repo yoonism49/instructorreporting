@@ -137,7 +137,6 @@
   cursor: pointer;
   font-size: 13px;
     text-align: center;
-    margin-left:20px;
 }
 .bycollapse-title {
   float:left;
@@ -192,14 +191,15 @@ body, html {
 .horiz-scroll {
 	overflow-x: scroll; width:98%;
 	margin-left:10px;
+//  margin-bottom:50px;
 }
 .horiz-scroll-module{
 	width:2920px; display:block; overflow: hidden;
 	width: 99%;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 .horiz-model-inside {
-	width:1860px;
+  overflow: auto;
 }
 .heatmap-div {
 	width:1850px;
@@ -222,10 +222,10 @@ body, html {
 .table > tbody 
 {
 	tr > td:nth-child(5){
-	padding-left:65px;
+	padding-left:25px;
 	}
 	tr > td:nth-child(4){
-	padding-left:65px;
+	padding-left:25px;
 	}
 }
 .react-tabs__tab-panel {
@@ -370,7 +370,7 @@ body, html {
   width:100%;
 }
 .collapsible-paragraph {
-  margin:12px;
+  margin:30px;
   padding:10px;
   background-color:#eeecec;
    border-radius: 5px;
@@ -390,4 +390,14 @@ body, html {
   font-weight:600;
   text-align:mid;
   margin-left:10px;
+}
+
+#sm-st-info-button {
+  background-color:#427d90;
+  height:30px;
+  border-radius: 15px 15px 15px 15px;
+  color:white;
+  width:80px;
+  cursor: pointer;
+  padding:5px 5px 15px 25px;
 }

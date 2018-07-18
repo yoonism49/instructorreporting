@@ -3,4 +3,4 @@
 export { getEarningGraphData }  from './earningGraph';
 export { getTeamMatesData }     from './teamMates';
 export { getUserInfoData }      from './userInfos';
-export { getUserInfoTestData }      from './userTestInfos';
+// export { getUserInfoTestData }      from './userTestInfos';

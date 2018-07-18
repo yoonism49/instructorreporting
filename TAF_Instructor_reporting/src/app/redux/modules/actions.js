@@ -1,5 +1,8 @@
 // flow weak
 
+//testHistory:
+
+export {chooseModule} from './testHistory';
 // earningGraph:
 export {fetchEarningGraphDataIfNeeded} from './earningGraph';
 // sideMenu:

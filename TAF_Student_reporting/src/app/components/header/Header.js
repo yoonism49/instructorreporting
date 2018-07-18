@@ -48,7 +48,6 @@ const Header = ({
 
 Header.propTypes = {
   appName:        PropTypes.string,
-
   userLogin:      PropTypes.string,
   userFirstname:  PropTypes.string,
   userLastname:   PropTypes.string,

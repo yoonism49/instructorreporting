@@ -70,5 +70,6 @@ export {
   leaveAlert,
 
   enterPagination,
-  leavePagination
+  leavePagination,
+  fetchStudentTestAnswers
 }                                     from './views';

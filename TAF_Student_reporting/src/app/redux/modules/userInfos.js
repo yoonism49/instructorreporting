@@ -98,6 +98,7 @@ export default function userInfos(
 
 
 export function fetchUserInfoDataIfNeeded() {
+
   return (
     dispatch: (action: any) => any,
     getState: () => any
@@ -109,6 +110,7 @@ export function fetchUserInfoDataIfNeeded() {
   };
 }
 export function fetchUserTestInfoDataIfNeeded() {
+
   return (
     dispatch: (action: any) => any,
     getState: () => any
@@ -183,6 +185,8 @@ function fetchUserTestInfosData() {
   return async (dispatch) => {
     dispatch(requestUserTestInfosData());
     try {
+      console.log('I am here');
+      console.log(`${appConfig.userTestInfos.data.API}`);
       const url = `http://ec2-54-193-65-106.us-west-1.compute.amazonaws.com:8080${appConfig.userTestInfos.data.API}`;
       return fetch(url)
       .then(res => res.json())
@@ -191,8 +195,7 @@ function fetchUserTestInfosData() {
         return json;
       })
     } catch (error) {
-      return dispatch(errorUserTestInfosData(error))
-      
+        return dispatch(errorUserTestInfosData(error))
     }
   };
 }

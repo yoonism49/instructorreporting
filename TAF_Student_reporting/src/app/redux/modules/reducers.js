@@ -8,6 +8,7 @@ import userInfos            from './userInfos';
 import teamMates            from './teamMates';
 import views                from './views';
 import userAuth             from './userAuth';
+import errorReducer         from './errorReducer';
 
 export const reducers = {
   earningGraph,
@@ -20,5 +21,6 @@ export const reducers = {
 
 export default combineReducers({
   ...reducers,
-  routing: routerReducer
+  routing: routerReducer,
+  errors: errorReducer
 });
